@@ -48,7 +48,7 @@
 #define dds238_REPLY_BYTE_COUNT                0x04                                //number of bytes with data
 
 #define dds238_B_01                            0x01                                //BYTE 1 -> slave address (default value 1 read from node 1)
-#define dds238_B_02                            0x03                                //BYTE 2 -> function code (default value 0x04 read from 3X input registers)
+#define dds238_B_02                            0x03                                //BYTE 2 -> function code (default value 0x03 read from 4X input registers)
                                                                                 //BYTES 3 & 4 (BELOW)
 
 //dds238 x registers
@@ -70,7 +70,7 @@
 #define dds238_ERR_NO_ERROR                    0                                   //no error
 #define dds238_ERR_CRC_ERROR                   1                                   //crc error
 #define dds238_ERR_WRONG_BYTES                 2                                   //bytes b0,b1 or b2 wrong
-#define dds238_ERR_NOT_ENOUGHT_BYTES           3                                   //not enough bytes from sdm
+#define dds238_ERR_NOT_ENOUGHT_BYTES           3                                   //not enough bytes from dds238
 #define dds238_ERR_TIMEOUT                     4                                   //timeout
 //------------------------------------------------------------------------------
 class dds238 {
