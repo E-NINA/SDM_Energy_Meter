@@ -3,7 +3,7 @@ const char index_page[] PROGMEM = R"=====(
 <HTML>
   <HEAD>
     <META name='viewport' content='width=device-width, initial-scale=1'>
-    <TITLE>SDM live POWER table</TITLE>
+    <TITLE>dds238 live POWER table</TITLE>
     <SCRIPT>
     var xmlHttp=createXmlHttpObject();
     function createXmlHttpObject(){
@@ -54,7 +54,7 @@ const char index_page[] PROGMEM = R"=====(
   </HEAD>
   <BODY onload='process()'>
     <CENTER>
-      <H1>SDM live POWER table</H1>
+      <H1>dds238 live POWER table</H1>
       <TABLE BORDER=1>
         <TR><TH title="VOLTAGE">VOLTAGE</TH><TD><A id='resp0'></A></TD><TD>V</TD></TR>
         <TR><TH title="CURRENT">CURRENT</TH><TD><A id='resp1'></A></TD><TD>A</TD></TR>
