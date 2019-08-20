@@ -1,6 +1,6 @@
-//sdm live page example by reaper7
+//dds238 live page example by enina
 
-#define READSDMEVERY  2000                                                      //read sdm every 2000ms
+#define READdds238EVERY  2000                                                      //read dds238 every 2000ms
 #define NBREG   5                                                               //number of sdm registers to read
 //#define USE_STATIC_IP
 
@@ -29,16 +29,16 @@ TX SSer/HSer swap D8|15                            |GND
 #include <ESPAsyncWebServer.h>                                                  //https://github.com/me-no-dev/ESPAsyncWebServer
 
 #include <SoftwareSerial.h>                                                     //import SoftwareSerial library (if used)
-#include <SDM.h>                                                                //https://github.com/reaper7/SDM_Energy_Meter
+#include <dds238.h>                                                                //https://github.com/E-NINA/dds238_Energy_Meter
 
 #include "index_page.h"
 //------------------------------------------------------------------------------
 AsyncWebServer server(80);
 
-SoftwareSerial swSerSDM(13, 15);                                                //config SoftwareSerial (rx->pin13 / tx->pin15) (if used)
+SoftwareSerial swSerdds238(13, 15);                                                //config SoftwareSerial (rx->pin13 / tx->pin15) (if used)
 
-SDM sdm(swSerSDM, 9600, NOT_A_PIN);                                             //SOFTWARE SERIAL
-//SDM sdm(Serial, 9600, NOT_A_PIN, SERIAL_8N1, false);                            //HARDWARE SERIAL
+dds238 dds238(swSerdds238, 9600, NOT_A_PIN);                                             //SOFTWARE SERIAL
+//dds238 dds238(Serial, 9600, NOT_A_PIN, SERIAL_8N1, false);                            //HARDWARE SERIAL
 
 //------------------------------------------------------------------------------
 String devicename = "PWRMETER";
@@ -59,21 +59,21 @@ unsigned long readtime;
 typedef volatile struct {
   volatile float regvalarr;
   const uint16_t regarr;
-} sdm_struct;
+} dds238_struct;
 
-volatile sdm_struct sdmarr[NBREG] = {
-  {0.00, SDM220T_VOLTAGE},                                                      //V
-  {0.00, SDM220T_CURRENT},                                                      //A
-  {0.00, SDM220T_POWER},                                                        //W
-  {0.00, SDM220T_POWER_FACTOR},                                                 //PF
-  {0.00, SDM220T_FREQUENCY},                                                    //Hz
+volatile dds238_struct dds238arr[NBREG] = {
+  {0.00, dds238_VOLTAGE},                                                      //V
+  {0.00, dds238_CURRENT},                                                      //A
+  {0.00, dds238_POWER},                                                        //W
+  {0.00, dds238_POWER_FACTOR},                                                 //PF
+  {0.00, dds238_FREQUENCY},                                                    //Hz
 };
 //------------------------------------------------------------------------------
 void xmlrequest(AsyncWebServerRequest *request) {
   String XML = F("<?xml version='1.0'?><xml>");
   for (int i = 0; i < NBREG; i++) { 
     XML += "<response" + (String)i + ">";
-    XML += String(sdmarr[i].regvalarr,2);
+    XML += String(dds238arr[i].regvalarr,2);
     XML += "</response" + (String)i + ">";
   }
   XML += F("<freeh>");
@@ -143,16 +143,16 @@ static void wifiInit() {
   }
 }
 //------------------------------------------------------------------------------
-void sdmRead() {
+void dds238Read() {
   float tmpval = NAN;
 
   for (uint8_t i = 0; i < NBREG; i++) {
-    tmpval = sdm.readVal(sdmarr[i].regarr);
+    tmpval = dds238.readVal(dds238arr[i].regarr);
 
     if (isnan(tmpval))
-      sdmarr[i].regvalarr = 0.00;
+      dds238arr[i].regvalarr = 0.00;
     else
-      sdmarr[i].regvalarr = tmpval;
+      dds238arr[i].regvalarr = tmpval;
 
     yield();
   }
@@ -167,7 +167,7 @@ void setup() {
   wifiInit();
   otaInit();
   serverInit();
-  sdm.begin();
+  dds238.begin();
 
   readtime = millis();
 
@@ -177,8 +177,8 @@ void setup() {
 void loop() {
   ArduinoOTA.handle();
 
-  if (millis() - readtime >= READSDMEVERY) {
-    sdmRead();
+  if (millis() - readtime >= READdds238EVERY) {
+    dds238Read();
     readtime = millis();
   }
 
