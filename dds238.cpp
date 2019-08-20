@@ -10,14 +10,14 @@
 //------------------------------------------------------------------------------
 #ifdef USE_HARDWARESERIAL
 #if defined ( ESP8266 )
-dds238::dds238(HardwareSerial& serial, long baud, int dere_pin, int config, bool swapuart) : sdmSer(serial) {
+dds238::dds238(HardwareSerial& serial, long baud, int dere_pin, int config, bool swapuart) : dds238Ser(serial) {
   this->_baud = baud;
   this->_dere_pin = dere_pin;
   this->_config = config;
   this->_swapuart = swapuart;
 }
 #elif defined ( ESP32 )
-dds238::dds238(HardwareSerial& serial, long baud, int dere_pin, int config, int8_t rx_pin, int8_t tx_pin) : sdmSer(serial) {
+dds238::dds238(HardwareSerial& serial, long baud, int dere_pin, int config, int8_t rx_pin, int8_t tx_pin) : dds238Ser(serial) {
   this->_baud = baud;
   this->_dere_pin = dere_pin;
   this->_config = config;
@@ -25,14 +25,14 @@ dds238::dds238(HardwareSerial& serial, long baud, int dere_pin, int config, int8
   this->_tx_pin = tx_pin;
 }
 #else
-dds238::dds238(HardwareSerial& serial, long baud, int dere_pin, int config) : sdmSer(serial) {
+dds238::dds238(HardwareSerial& serial, long baud, int dere_pin, int config) : dds238Ser(serial) {
   this->_baud = baud;
   this->_dere_pin = dere_pin;
   this->_config = config;
 }
 #endif
 #else
-dds238::dds238(SoftwareSerial& serial, long baud, int dere_pin) : sdmSer(serial) {
+dds238::dds238(SoftwareSerial& serial, long baud, int dere_pin) : dds238Ser(serial) {
   this->_baud = baud;
   this->_dere_pin = dere_pin;
 }
@@ -44,19 +44,19 @@ dds238::~dds238() {
 void dds238::begin(void) {
 #ifdef USE_HARDWARESERIAL
 #if defined ( ESP8266 )
-  sdmSer.begin(_baud, (SerialConfig)_config);
+  dds238Ser.begin(_baud, (SerialConfig)_config);
 #elif defined ( ESP32 )
-  sdmSer.begin(_baud, _config, _rx_pin, _tx_pin);
+  dds238Ser.begin(_baud, _config, _rx_pin, _tx_pin);
 #else
-  sdmSer.begin(_baud, _config);
+  dds238Ser.begin(_baud, _config);
 #endif
 #else
-  sdmSer.begin(_baud);
+  dds238Ser.begin(_baud);
 #endif
 #ifdef USE_HARDWARESERIAL
 #ifdef ESP8266
   if (_swapuart)
-    sdmSer.swap();
+    dds238Ser.swap();
 #endif
 #endif
   if (_dere_pin != NOT_A_PIN) {
@@ -68,24 +68,24 @@ void dds238::begin(void) {
 float dds238::readVal(uint16_t reg,  byte type, uint8_t node) {
   uint16_t temp;
   unsigned long resptime;
-  uint8_t sdmarr[FRAMESIZE] = {node, dds238_B_02, 0, 0, dds238_B_05, dds238_B_06, 0, 0, 0};
+  uint8_t dds238arr[FRAMESIZE] = {node, dds238_B_02, 0, 0, dds238_B_05, dds238_B_06, 0, 0, 0};
   float res = NAN;
   uint16_t readErr = dds238_ERR_NO_ERROR;
 
-  sdmarr[2] = highByte(reg);
-  sdmarr[3] = lowByte(reg);
+  dds238arr[2] = highByte(reg);
+  dds238arr[3] = lowByte(reg);
 
-  temp = calculateCRC(sdmarr, FRAMESIZE - 3);                                   //calculate out crc only from first 6 bytes
+  temp = calculateCRC(dds238arr, FRAMESIZE - 3);                                   //calculate out crc only from first 6 bytes
 
-  sdmarr[6] = lowByte(temp);
-  sdmarr[7] = highByte(temp);
+  dds238arr[6] = lowByte(temp);
+  dds238arr[7] = highByte(temp);
 
 #ifndef USE_HARDWARESERIAL
-  sdmSer.listen();                                                              //enable softserial rx interrupt
+  dds238Ser.listen();                                                              //enable softserial rx interrupt
 #endif
 
-  while (sdmSer.available() > 0)  {                                             //read serial if any old data is available
-    sdmSer.read();
+  while (dds238Ser.available() > 0)  {                                             //read serial if any old data is available
+    dds238Ser.read();
   }
 
   if (_dere_pin != NOT_A_PIN)
@@ -93,16 +93,16 @@ float dds238::readVal(uint16_t reg,  byte type, uint8_t node) {
 
   delay(2);                                                                     //fix for issue (nan reading) by sjfaustino: https://github.com/reaper7/SDM_Energy_Meter/issues/7#issuecomment-272111524
 
-  sdmSer.write(sdmarr, FRAMESIZE - 1);                                          //send 8 bytes
+  dds238Ser.write(dds238arr, FRAMESIZE - 1);                                          //send 8 bytes
 
-  sdmSer.flush();                                                               //clear out tx buffer
+  dds238Ser.flush();                                                               //clear out tx buffer
 
   if (_dere_pin != NOT_A_PIN)
     digitalWrite(_dere_pin, LOW);                                               //receive from dds238 -> DE Disable, /RE Enable (for control MAX485)
 
   resptime = millis() + MAX_MILLIS_TO_WAIT;
 
-  while (sdmSer.available() < FRAMESIZE) {
+  while (dds238Ser.available() < FRAMESIZE) {
     if (resptime < millis()) {
       readErr = dds238_ERR_TIMEOUT;                                                //err debug (4)
       break;
@@ -112,28 +112,28 @@ float dds238::readVal(uint16_t reg,  byte type, uint8_t node) {
 
   if (readErr == dds238_ERR_NO_ERROR) {                                            //if no timeout...
 
-    if(sdmSer.available() >= FRAMESIZE) {
+    if(dds238Ser.available() >= FRAMESIZE) {
 
       for(int n=0; n<FRAMESIZE; n++) {
-        sdmarr[n] = sdmSer.read();
+        dds238arr[n] = dds238Ser.read();
       }
 
-      if (sdmarr[0] == node && sdmarr[1] == dds238_B_02 && sdmarr[2] == dds238_REPLY_BYTE_COUNT) {
+      if (dds238arr[0] == node && dds238arr[1] == dds238_B_02 && dds238arr[2] == dds238_REPLY_BYTE_COUNT) {
 
-      if ((calculateCRC(sdmarr, FRAMESIZE - 2)) == ((sdmarr[(FRAMESIZE-1)] << 8) | sdmarr[(FRAMESIZE-2)])) {  //calculate crc and compare with received crc
+      if ((calculateCRC(dds238arr, FRAMESIZE - 2)) == ((dds238arr[(FRAMESIZE-1)] << 8) | dds238arr[(FRAMESIZE-2)])) {  //calculate crc and compare with received crc
           
 
         if(type == 2) {
 	       	 int32_t sinput = 0;
-            ((uint8_t*)&sinput)[1]= sdmarr[3];
-            ((uint8_t*)&sinput)[0]= sdmarr[4];
+            ((uint8_t*)&sinput)[1]= dds238arr[3];
+            ((uint8_t*)&sinput)[0]= dds238arr[4];
             res = sinput;
 		     } else {
             int32_t sinput = 1;
-            ((uint8_t*)&sinput)[3]= sdmarr[3];
-            ((uint8_t*)&sinput)[2]= sdmarr[4];
-            ((uint8_t*)&sinput)[1]= sdmarr[5];
-            ((uint8_t*)&sinput)[0]= sdmarr[6];
+            ((uint8_t*)&sinput)[3]= dds238arr[3];
+            ((uint8_t*)&sinput)[2]= dds238arr[4];
+            ((uint8_t*)&sinput)[1]= dds238arr[5];
+            ((uint8_t*)&sinput)[0]= dds238arr[6];
             res = sinput;
 			}	
           
@@ -158,12 +158,12 @@ float dds238::readVal(uint16_t reg,  byte type, uint8_t node) {
     ++readingsuccesscount;
   }
 
-  while (sdmSer.available() > 0)  {                                             //read redundant serial bytes, if any
-    sdmSer.read();
+  while (dds238Ser.available() > 0)  {                                             //read redundant serial bytes, if any
+    dds238Ser.read();
   }
 
 #ifndef USE_HARDWARESERIAL
-  sdmSer.end();                                                                 //disable softserial rx interrupt
+  dds238Ser.end();                                                                 //disable softserial rx interrupt
 #endif
 
   return (res);
