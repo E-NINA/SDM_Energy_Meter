@@ -15,15 +15,15 @@ TX SSer/HSer swap D8|15                            |GND
 */
 
 #include <SoftwareSerial.h>                                                     //import SoftwareSerial library
-#include <SDM.h>                                                                //import SDM library
+#include <dds238.h>                                                                //import dds238 library
 
 SoftwareSerial swSerSDM(13, 15);                                                //config SoftwareSerial (rx->pin13 / tx->pin15)
 
-SDM sdm(swSerSDM, 9600, NOT_A_PIN);                                             //config SDM
+dds238 sdm(swSerSDM, 9600, NOT_A_PIN);                                             //config dds238
 
 void setup() {
   Serial.begin(115200);                                                         //initialize serial
-  sdm.begin();                                                                  //initialize SDM communication
+  sdm.begin();                                                                  //initialize dds238 communication
 }
 
 void loop() {
@@ -32,25 +32,25 @@ void loop() {
   Serial.print(bufout);
 
   Serial.print("Voltage:   ");
-  Serial.print(sdm.readVal(SDM220T_VOLTAGE), 2);                                //display voltage
+  Serial.print(sdm.readVal(dds238220T_VOLTAGE), 2);                                //display voltage
   Serial.println("V");
 
   delay(50);
 
   Serial.print("Current:   ");
-  Serial.print(sdm.readVal(SDM220T_CURRENT), 2);                                //display current  
+  Serial.print(sdm.readVal(dds238220T_CURRENT), 2);                                //display current  
   Serial.println("A");
 
   delay(50);
 
   Serial.print("Power:     ");
-  Serial.print(sdm.readVal(SDM220T_POWER), 2);                                  //display power
+  Serial.print(sdm.readVal(dds238220T_POWER), 2);                                  //display power
   Serial.println("W");
 
   delay(50);
 
   Serial.print("Frequency: ");
-  Serial.print(sdm.readVal(SDM220T_FREQUENCY), 2);                              //display frequency
+  Serial.print(sdm.readVal(dds238220T_FREQUENCY), 2);                              //display frequency
   Serial.println("Hz");   
 
   delay(1000);                                                                  //wait a while before next loop
