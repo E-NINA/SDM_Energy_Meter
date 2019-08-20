@@ -29,7 +29,7 @@ _tested on DDS238-4 Wemos d1 mini->ESP8266 with Arduino 1.8.9-beta & 2.3.0 esp82
 ### Screenshots: ###
 
 
-<img src="https://github.com/reaper7/SDM_Energy_Meter/blob/master/img/hardware_sdm220_1.jpg" height="330"><img src="https://github.com/reaper7/SDM_Energy_Meter/blob/master/img/hardware_sdm220_2.jpg" height="330"></br>
+<img src="https://github.com/E-NINA/dds238_Energy_Meter/blob/master/img/Picture1.jpg" height="330"></br>
 <p align="center">
   <img src="https://github.com/reaper7/SDM_Energy_Meter/blob/master/img/livepage.gif"></br>
   <i>live page example (extended) screenshot</i>
