@@ -17,13 +17,13 @@ TX SSer/HSer swap D8|15                            |GND
 #include <SoftwareSerial.h>                                                     //import SoftwareSerial library
 #include <dds238.h>                                                                //import dds238 library
 
-SoftwareSerial swSerSDM(13, 15);                                                //config SoftwareSerial (rx->pin13 / tx->pin15)
+SoftwareSerial swSerdds238(13, 15);                                                //config SoftwareSerial (rx->pin13 / tx->pin15)
 
-dds238 sdm(swSerSDM, 9600, NOT_A_PIN);                                             //config dds238
+dds238 dds238(swSerds238, 9600, NOT_A_PIN);                                             //config dds238
 https://github.com/E-NINA/SDM_Energy_Meter/tree/master/examples/sdm_simple
 void setup() {
   Serial.begin(115200);                                                         //initialize serial
-  sdm.begin();                                                                  //initialize dds238 communication
+  dds238.begin();                                                                  //initialize dds238 communication
 }
 
 void loop() {
@@ -32,25 +32,25 @@ void loop() {
   Serial.print(bufout);
 
   Serial.print("Voltage:   ");
-  Serial.print(sdm.readVal(dds238220T_VOLTAGE), 2);                                //display voltage
+  Serial.print(dds238.readVal(dds238220T_VOLTAGE, 1), 2);                                //display voltage
   Serial.println("V");
 
   delay(50);
 
   Serial.print("Current:   ");
-  Serial.print(sdm.readVal(dds238220T_CURRENT), 2);                                //display current  
+  Serial.print(dds238.readVal(dds238220T_CURRENT, 1), 2);                                //display current  
   Serial.println("A");
 
   delay(50);
 
   Serial.print("Power:     ");
-  Serial.print(sdm.readVal(dds238220T_POWER), 2);                                  //display power
+  Serial.print(dds238.readVal(dds238220T_POWER, 1), 2);                                  //display power
   Serial.println("W");
 
   delay(50);
 
   Serial.print("Frequency: ");
-  Serial.print(sdm.readVal(dds238220T_FREQUENCY), 2);                              //display frequency
+  Serial.print(dds238.readVal(dds238220T_FREQUENCY, 1), 2);                              //display frequency
   Serial.println("Hz");   
 
   delay(1000);                                                                  //wait a while before next loop
