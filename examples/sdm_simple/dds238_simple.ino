@@ -19,38 +19,35 @@ TX SSer/HSer swap D8|15                            |GND
 
 SoftwareSerial swSerdds238(13, 15);                                                //config SoftwareSerial (rx->pin13 / tx->pin15)
 
-dds238 dds238(swSerds238, 9600, NOT_A_PIN);                                             //config dds238
-https://github.com/E-NINA/SDM_Energy_Meter/tree/master/examples/sdm_simple
+dds238 dds238(swSerdds238, 9600, NOT_A_PIN);                                             //config dds238
+
 void setup() {
   Serial.begin(115200);                                                         //initialize serial
   dds238.begin();                                                                  //initialize dds238 communication
 }
 
 void loop() {
-  char bufout[10];
-  sprintf(bufout, "%c[1;0H", 27);
-  Serial.print(bufout);
-
+  
   Serial.print("Voltage:   ");
-  Serial.print(dds238.readVal(dds238220T_VOLTAGE, 1), 2);                                //display voltage
+  Serial.print(dds238.readVal(dds238_VOLTAGE, 2), 2);                                //display voltage
   Serial.println("V");
 
   delay(50);
 
   Serial.print("Current:   ");
-  Serial.print(dds238.readVal(dds238220T_CURRENT, 1), 2);                                //display current  
+  Serial.print(dds238.readVal(dds238_CURRENT, 2), 2);                                //display current  
   Serial.println("A");
 
   delay(50);
 
   Serial.print("Power:     ");
-  Serial.print(dds238.readVal(dds238220T_POWER, 1), 2);                                  //display power
+  Serial.print(dds238.readVal(dds238_POWER, 2), 2);                                  //display power
   Serial.println("W");
 
   delay(50);
 
   Serial.print("Frequency: ");
-  Serial.print(dds238.readVal(dds238220T_FREQUENCY, 1), 2);                              //display frequency
+  Serial.print(dds238.readVal(dds238_FREQUENCY, 2), 2);                              //display frequency
   Serial.println("Hz");   
 
   delay(1000);                                                                  //wait a while before next loop
