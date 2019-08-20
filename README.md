@@ -140,17 +140,19 @@ https://github.com/E-NINA/dds238_Energy_Meter/blob/master/dd238.h#L52
 ```cpp
 //reading voltage from dds238 with slave address 0x01 (default)
 //                                      __________register name
-//                                     |
-float voltage = dds238.readVal(dds238_VOLTAGE);
+//                                     |        __Data length type
+//                                     |       |
+float voltage = dds238.readVal(dds238_VOLTAGE, 2);
 
 //reading power from 1st dds238 with slave address ID = 0x01
 //reading power from 2nd dds238 with slave address ID = 0x02
 //useful with several meters on RS485 line
-//                                      __________register name
-//                                     |      ____dds238 device ID  
-//                                     |     |
-float power1 = dds238.readVal(dds238_POWER, 0x01);
-float power2 = dds238.readVal(dds238_POWER, 0x02);
+//                                      ___________register name
+//                                     |     ______Data length type
+//                                     |    |     _dds238 device ID  
+//                                     |    |    |
+float power1 = dds238.readVal(dds238_POWER, 2, 0x01);
+float power2 = dds238.readVal(dds238_POWER, 2, 0x02);
 ```
 NOTE: <i>if you reading multiple dds238 devices on the same RS485 line,</br>
 remember to set the same transmission parameters on each device,</br>
