@@ -20,7 +20,7 @@ TX SSer/HSer swap D8|15                            |GND
 SoftwareSerial swSerSDM(13, 15);                                                //config SoftwareSerial (rx->pin13 / tx->pin15)
 
 dds238 sdm(swSerSDM, 9600, NOT_A_PIN);                                             //config dds238
-
+https://github.com/E-NINA/SDM_Energy_Meter/tree/master/examples/sdm_simple
 void setup() {
   Serial.begin(115200);                                                         //initialize serial
   sdm.begin();                                                                  //initialize dds238 communication
