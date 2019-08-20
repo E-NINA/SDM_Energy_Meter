@@ -38,93 +38,93 @@ _tested on DDS238-4 Wemos d1 mini->ESP8266 with Arduino 1.8.9-beta & 2.3.0 esp82
 ---
 
 ### Configuring: ###
-Default configuration is specified in the [SDM.h](https://github.com/reaper7/SDM_Energy_Meter/blob/master/SDM.h#L18) file, and parameters are set to:</br>
-<i>Software Serial, baud 4800, uart config SERIAL_8N1, without DE/RE pin</i>.</br>
+Default configuration is specified in the [dds238.h](https://github.com/E-NINA/dds238_Energy_Meter/blob/master/dd238.h#L18) file, and parameters are set to:</br>
+<i>Software Serial, baud 9600, uart config SERIAL_8N1, without DE/RE pin</i>.</br>
 
 User can set the parameters in two ways:
-- by editing the [SDM_Config_User.h](https://github.com/reaper7/SDM_Energy_Meter/blob/master/SDM_Config_User.h) file
+- by editing the [dds238_Config_User.h](https://github.com/E-NINA/dds238_Energy_Meter/blob/master/dd238_Config_User.h) file
 - by passing values during initialization (section below)
 
 NOTE for Hardware Serial mode: <i>to force the Hardware Serial mode,</br>
-user must edit the corresponding entry in [SDM_Config_User.h](https://github.com/reaper7/SDM_Energy_Meter/blob/master/SDM_Config_User.h#L17) file.</br>
+user must edit the corresponding entry in [dds238_Config_User.h](https://github.com/E-NINA/dds238_Energy_Meter/blob/master/dd238_Config_User.h#L17) file.</br>
 adding #define USE_HARDWARESERIAL to the main ino file is not enough.</i>
 
 ---
 
 ### Initializing: ###
-If the user configuration is specified in the [SDM_Config_User.h](https://github.com/reaper7/SDM_Energy_Meter/blob/master/SDM_Config_User.h) file</br>
-or if the default configuration from the [SDM.h](https://github.com/reaper7/SDM_Energy_Meter/blob/master/SDM.h#L18) file is suitable</br>
+If the user configuration is specified in the [dds238_Config_User.h](https://github.com/E-NINA/dds238_Energy_Meter/blob/master/dd238_Config_User.h) file</br>
+or if the default configuration from the [dds238.h](https://github.com/E-NINA/dds238_Energy_Meter/blob/master/dd238.h#L18) file is suitable</br>
 initialization is limited to passing serial port reference (software or hardware)</br>
 and looks as follows:
 ```cpp
 //lib init when Software Serial is used:
 #include <SoftwareSerial.h>
-#include <SDM.h>
+#include <dds238.h>
 
 SoftwareSerial swSerSDM(13, 15);
 
 //              _software serial reference
 //             |
-SDM sdm(swSerSDM);
+dds238 dds238(swSerSDM);
 ```
 
 ```cpp
 //lib init when Hardware Serial is used:
-#include <SDM.h>
+#include <dds238.h>
 
 //            _hardware serial reference
 //           |
-SDM sdm(Serial);
+dds238 dds238(Serial);
 ```
 If the user wants to temporarily change the configuration during the initialization process</br>
 then can pass additional parameters as below:
 ```cpp
 //lib init when Software Serial is used:
 #include <SoftwareSerial.h>
-#include <SDM.h>
+#include <dds238.h>
 
 SoftwareSerial swSerSDM(13, 15);
 
 //              __________________software serial reference
-//             |      ____________baudrate(optional, default from SDM_Config_User.h)   
-//             |     |           _dere pin for max485(optional, default from SDM_Config_User.h)
+//             |      ____________baudrate(optional, default from dds238_Config_User.h)   
+//             |     |           _dere pin for max485(optional, default from dds238_Config_User.h)
 //             |     |          |
-SDM sdm(swSerSDM, 9600, NOT_A_PIN);
+dds238 dds238(swSerSDM, 9600, NOT_A_PIN);
 ```
 
 ```cpp
 //lib init when Hardware Serial is used:
-#include <SDM.h>
+#include <dds238.h>
 
 // for ESP8266
 //            _____________________________________hardware serial reference
-//           |      _______________________________baudrate(optional, default from SDM_Config_User.h)
-//           |     |           ____________________dere pin for max485(optional, default from SDM_Config_User.h)
-//           |     |          |            ________hardware uart config(optional, default from SDM_Config_User.h)
-//           |     |          |           |       _swap hw serial pins from 3/1 to 13/15(optional, default from SDM_Config_User.h)
+//           |      _______________________________baudrate(optional, default from dds238_Config_User.h)
+//           |     |           ____________________dere pin for max485(optional, default from dds238_Config_User.h)
+//           |     |          |            ________hardware uart config(optional, default from dds238_Config_User.h)
+//           |     |          |           |       _swap hw serial pins from 3/1 to 13/15(optional, default from dds238_Config_User.h)
 //           |     |          |           |      |
-SDM sdm(Serial, 9600, NOT_A_PIN, SERIAL_8N1, false);
+dds238 dds238(Serial, 9600, NOT_A_PIN, SERIAL_8N1, false);
 
 
 // for ESP32
 //            ____________________________________________hardware serial reference
-//           |      ______________________________________baudrate(optional, default from SDM_Config_User.h)
-//           |     |           ___________________________dere pin for max485(optional, default from SDM_Config_User.h)
-//           |     |          |            _______________hardware uart config(optional, default from SDM_Config_User.h)
+//           |      ______________________________________baudrate(optional, default from dds238_Config_User.h)
+//           |     |           ___________________________dere pin for max485(optional, default from dds238_Config_User.h)
+//           |     |          |            _______________hardware uart config(optional, default from dds238_Config_User.h)
 //           |     |          |           |       ________rx pin number(optional)
 //           |     |          |           |      |       _tx pin number(optional)
 //           |     |          |           |      |      | 
-SDM sdm(Serial, 9600, NOT_A_PIN, SERIAL_8N1, rxpin, txpin);
+dds238 dds238(Serial, 9600, NOT_A_PIN, SERIAL_8N1, rxpin, txpin);
 
 
 // for AVR
 //            _____________________________________hardware serial reference
-//           |      _______________________________baudrate(optional, default from SDM_Config_User.h)
-//           |     |           ____________________dere pin for max485(optional, default from SDM_Config_User.h)
-//           |     |          |            ________hardware uart config(optional, default from SDM_Config_User.h)
+//           |      _______________________________baudrate(optional, default from dds238_Config_User.h)
+//           |     |           ____________________dere pin for max485(optional, default from dds238_Config_User.h)
+//           |     |          |            ________hardware uart config(optional, default from dds238_Config_User.h)
 //           |     |          |           |
 //           |     |          |           |
-SDM sdm(Serial, 9600, NOT_A_PIN, SERIAL_8N1);
+dds238 dds238(Serial, 9600, NOT_A_PIN, SERIAL_8N1);
 ```
 NOTE for ESP8266: <i>when GPIO15 is used (especially for swapped hardware serial):</br>
 some converters (like mine) have built-in pullup resistors on TX/RX lines from rs232 side,</br>
@@ -135,32 +135,32 @@ to ensure low level on GPIO15 by built-in in most ESP8266 modules pulldown resis
 ---
 
 ### Reading: ###
-List of available registers for SDM120/220/230/630:</br>
-https://github.com/reaper7/SDM_Energy_Meter/blob/master/SDM.h#L52
+List of available registers for DDS238-4 W; DDS238 4 ZN/S; DDS238 2 ZN/S; DDS238 1 ZN:</br>
+https://github.com/E-NINA/dds238_Energy_Meter/blob/master/dd238.h#L52
 ```cpp
-//reading voltage from SDM with slave address 0x01 (default)
+//reading voltage from dds238 with slave address 0x01 (default)
 //                                      __________register name
 //                                     |
-float voltage = sdm.readVal(SDM220T_VOLTAGE);
+float voltage = dds238.readVal(dds238_VOLTAGE);
 
-//reading power from 1st SDM with slave address ID = 0x01
-//reading power from 2nd SDM with slave address ID = 0x02
+//reading power from 1st dds238 with slave address ID = 0x01
+//reading power from 2nd dds238 with slave address ID = 0x02
 //useful with several meters on RS485 line
 //                                      __________register name
-//                                     |      ____SDM device ID  
+//                                     |      ____dds238 device ID  
 //                                     |     |
-float power1 = sdm.readVal(SDM220T_POWER, 0x01);
-float power2 = sdm.readVal(SDM220T_POWER, 0x02);
+float power1 = dds238.readVal(dds238_POWER, 0x01);
+float power2 = dds238.readVal(dds238_POWER, 0x02);
 ```
-NOTE: <i>if you reading multiple SDM devices on the same RS485 line,</br>
+NOTE: <i>if you reading multiple dds238 devices on the same RS485 line,</br>
 remember to set the same transmission parameters on each device,</br>
-only ID must be different for each SDM device.</i>
+only ID must be different for each dds238 device.</i>
 
 ---
 
 ### Problems: ###
 Sometimes <b>readVal</b> return <b>NaN</b> value (not a number),</br>
-this means that the requested value could not be read from the sdm module for various reasons.</br>
+this means that the requested value could not be read from the dds238 module for various reasons.</br>
 
 __Please check out open and close issues, maybe the cause of your error is explained or solved there.__
 
@@ -192,13 +192,13 @@ You can get last error code using function:
 //                                     |          false or no parameter -> read error code
 //                                     |          but not reset stored code (for future checking)
 //                                     |          will be overwriten when next error occurs
-uint16_t lasterror = sdm.getErrCode(true);
+uint16_t lasterror = dds238.getErrCode(true);
 
 //clear error code also available with:
-sdm.clearErrCode();
+dds238.clearErrCode();
 ```
 Errors list returned by <b>getErrCode</b>:</br>
-https://github.com/reaper7/SDM_Energy_Meter/blob/master/SDM.h#L161</br>
+https://github.com/E-NINA/dds238_Energy_Meter/blob/master/dd238.h#L161</br>
 
 You can also check total number of errors using function:
 ```cpp
@@ -207,10 +207,10 @@ You can also check total number of errors using function:
 //                                      |         true -> read and reset errors counter
 //                                      |         false or no parameter -> read errors counter
 //                                      |         but not reset stored counter (for future checking)
-uint16_t cnterrors = sdm.getErrCount(true);
+uint16_t cnterrors = dds238.getErrCount(true);
 
 //clear errors counter also available with:
-sdm.clearErrCount();
+dds238.clearErrCount();
 ```
 
 And finally you can read the counter of correctly made readings:
@@ -220,26 +220,18 @@ And finally you can read the counter of correctly made readings:
 //                                        |         true -> read and reset success counter
 //                                        |         false or no parameter -> read success counter
 //                                        |         but not reset stored counter (for future checking)
-uint16_t cntsuccess = sdm.getSuccCount(true);
+uint16_t cntsuccess = dds238.getSuccCount(true);
 
 //clear success counter also available with:
-sdm.clearSuccCount();
+dds238.clearSuccCount();
 ```
 
 ---
 
 ### Credits: ###
-
+:+1: SDM_Energy_Meter library by Reaper7 (https://github.com/reaper7/SDM_Energy_Meter)</br>
 :+1: ESP SoftwareSerial library by Peter Lerup (https://github.com/plerup/espsoftwareserial)</br>
 :+1: crc calculation by Jaime García (https://github.com/peninquen/Modbus-Energy-Monitor-Arduino)</br>
-:+1: new registers for SDM120 and SDM630 by bart.e (https://github.com/beireken/SDM220t)</br>
 
 ---
 
-<i>old library version is available at [old_template branch](https://github.com/reaper7/SDM_Energy_Meter/tree/old_template)</i><br>
-
----
-
-**2016-2019 Reaper7**
-
-[paypal.me/reaper7md](https://www.paypal.me/reaper7md)
