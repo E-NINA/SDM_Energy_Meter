@@ -35,7 +35,7 @@ TX SSer/HSer swap D8|15                            |GND
 //------------------------------------------------------------------------------
 AsyncWebServer server(80);
 
-SoftwareSerial swSerdds238(13, 15);                                                //config SoftwareSerial (rx->pin13 / tx->pin15) (if used)
+SoftwareSerial swSerdds238(13, 12);                                                //config SoftwareSerial (rx->pin13 / tx->pin15) (if used)
 
 dds238 dds238(swSerdds238, 9600, NOT_A_PIN);                                             //SOFTWARE SERIAL
 //dds238 dds238(Serial, 9600, NOT_A_PIN, SERIAL_8N1, false);                            //HARDWARE SERIAL
@@ -59,14 +59,15 @@ unsigned long readtime;
 typedef volatile struct {
   volatile float regvalarr;
   const uint16_t regarr;
+  byte isSigned;
 } dds238_struct;
 
 volatile dds238_struct dds238arr[NBREG] = {
-  {0.00, dds238_VOLTAGE},                                                      //V
-  {0.00, dds238_CURRENT},                                                      //A
-  {0.00, dds238_POWER},                                                        //W
-  {0.00, dds238_POWER_FACTOR},                                                 //PF
-  {0.00, dds238_FREQUENCY},                                                    //Hz
+  {0.00, dds238_VOLTAGE, 2},                                                      //V
+  {0.00, dds238_CURRENT, 2},                                                      //A
+  {0.00, dds238_POWER, 2},                                                        //W
+  {0.00, dds238_POWER_FACTOR, 2},                                                 //PF
+  {0.00, dds238_FREQUENCY, 2},                                                    //Hz
 };
 //------------------------------------------------------------------------------
 void xmlrequest(AsyncWebServerRequest *request) {
@@ -147,13 +148,12 @@ void dds238Read() {
   float tmpval = NAN;
 
   for (uint8_t i = 0; i < NBREG; i++) {
-    tmpval = dds238.readVal(dds238arr[i].regarr);
+    tmpval = dds238.readVal(dds238arr[i].regarr, dds238arr[i].isSigned);
 
     if (isnan(tmpval))
       dds238arr[i].regvalarr = 0.00;
     else
       dds238arr[i].regvalarr = tmpval;
-
     yield();
   }
 }
