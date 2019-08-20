@@ -1,4 +1,4 @@
-## Library for reading SDM120 SDM220 SDM230 SDM630 Modbus Energy meters. ##
+## Library for reading DDS238-4 W; DDS238 4 ZN/S; DDS238 2 ZN/S; DDS238 1 ZN Modbus Energy meters. ##
 
 ### SECTIONS: ###
 #### 1. [INTRODUCTION](#introduction) ####
@@ -12,7 +12,7 @@
 ---
 
 ### Introduction: ###
-This library allows you reading SDM module(s) using:
+This library allows you reading dds238 module(s) using:
 - [x] Hardware Serial (<i><b>recommended option</b>, smallest number of reads errors, especially for esp8266</i>) <b><i>or</i></b>
 - [x] Software Serial (<i>[library for ESP8266](https://github.com/plerup/espsoftwareserial)</i>), attached as libraries for esp8266 and avr
 
@@ -22,11 +22,13 @@ you also need rs232<->rs485 converter:
      (<i>in this case MAX485 DE and RE pins must be connected together to one of uC pin</br>
      and this pin must be passed when initializing the library</i>)
 
-_Tested on Wemos D1 Mini with Arduino IDE 1.8.3-1.9.0b & ESP8266 core 2.3.0-2.4.1_
+_tested on DDS238-4 Wemos d1 mini->ESP8266 with Arduino 1.8.9-beta & 2.3.0 esp8266 core_
 
 ---
 
 ### Screenshots: ###
+
+
 <img src="https://github.com/reaper7/SDM_Energy_Meter/blob/master/img/hardware_sdm220_1.jpg" height="330"><img src="https://github.com/reaper7/SDM_Energy_Meter/blob/master/img/hardware_sdm220_2.jpg" height="330"></br>
 <p align="center">
   <img src="https://github.com/reaper7/SDM_Energy_Meter/blob/master/img/livepage.gif"></br>
