@@ -1,7 +1,9 @@
-/* Library for reading SDM 120/220/230/630 Modbus Energy meters.
+    
+/* Library for reading DDS238-4 W; DDS238 4 ZN/S; DDS238 2 ZN/S; DDS238 1 ZN Modbus Energy meters.
 *  Reading via Hardware or Software Serial library & rs232<->rs485 converter
-*  2016-2019 Reaper7 (tested on wemos d1 mini->ESP8266 with Arduino 1.9.0-beta & 2.4.1 esp8266 core)
-*  crc calculation by Jaime GarcÌa (https://github.com/peninquen/Modbus-Energy-Monitor-Arduino/)
+*  2019 ENina (tested on DDS238-4 Wemos d1 mini->ESP8266 with Arduino 1.8.9-beta & 2.3.0 esp8266 core)
+*  Based on SDM_Energy_Meter 2016-2019 Reaper7
+*  crc calculation by Jaime Garc√≠a (https://github.com/peninquen/Modbus-Energy-Monitor-Arduino/)
 */
 
 /*
@@ -21,7 +23,7 @@
 /*
 *  define user baudrate
 */
-//#define SDM_UART_BAUD                       9600                                
+//#define dds238_UART_BAUD                       9600                                
 
 //------------------------------------------------------------------------------
 
@@ -35,9 +37,9 @@
 #ifdef USE_HARDWARESERIAL
 
   /*
-  *  define user SDM_UART_CONFIG
+  *  define user dds238_UART_CONFIG
   */
-  //#define SDM_UART_CONFIG                   SERIAL_8N1                          
+  //#define dds238_UART_CONFIG                   SERIAL_8N1                          
 
   //----------------------------------------------------------------------------
 
@@ -51,7 +53,7 @@
 //------------------------------------------------------------------------------
 
 /*
-*  define user MAX_MILLIS_TO_WAIT to wait for response from SDM
+*  define user MAX_MILLIS_TO_WAIT to wait for response from dds238
 */
 //#define MAX_MILLIS_TO_WAIT                  500                                 
 
