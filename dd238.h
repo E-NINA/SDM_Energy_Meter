@@ -99,9 +99,9 @@ class dds238 {
 
   private:
 #ifdef USE_HARDWARESERIAL
-    HardwareSerial& sdmSer;
+    HardwareSerial& dds238Ser;
 #else
-    SoftwareSerial& sdmSer;
+    SoftwareSerial& dds238Ser;
 #endif
 
 #ifdef USE_HARDWARESERIAL
