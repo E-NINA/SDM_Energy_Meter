@@ -52,15 +52,15 @@
                                                                                 //BYTES 3 & 4 (BELOW)
 
 //dds238 x registers
-#define dds238_VOLTAGE                     0x000C                              //V
-#define dds238_CURRENT                     0x000D                              //A
-#define dds238_POWER                       0x000E                              //W
-#define dds238_REACTIVE_APPARENT_POWER     0x000F                              //VAR
-#define dds238_POWER_FACTOR                0x0010                              //
-#define dds238_FREQUENCY                   0x0011                              //Hz
-#define dds238_IMPORT_ACTIVE_ENERGY        0x000A                              //Wh   (0x02)
-#define dds238_EXPORT_ACTIVE_ENERGY        0x0008                              //Wh   (0x02)
-#define dds238_TOTAL_ACTIVE_ENERGY         0x0000                              //Wh   (0x02)
+#define dds238_VOLTAGE                     0x000C                              //V   Data length type 0x01 - use index "2"
+#define dds238_CURRENT                     0x000D                              //A   Data length type 0x01 - use index "2"
+#define dds238_POWER                       0x000E                              //W   Data length type 0x01 - use index "2"
+#define dds238_REACTIVE_APPARENT_POWER     0x000F                              //VAR Data length type 0x01 - use index "2"
+#define dds238_POWER_FACTOR                0x0010                              //    Data length type 0x01 - use index "2"
+#define dds238_FREQUENCY                   0x0011                              //Hz  Data length type 0x01 - use index "2"
+#define dds238_IMPORT_ACTIVE_ENERGY        0x000A                              //Wh  Data length type 0x02 - use index "1"
+#define dds238_EXPORT_ACTIVE_ENERGY        0x0008                              //Wh  Data length type 0x02 - use index "1"
+#define dds238_TOTAL_ACTIVE_ENERGY         0x0000                              //Wh  Data length type 0x02 - use index "1"
 
 
 
