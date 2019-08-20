@@ -61,11 +61,11 @@ and looks as follows:
 #include <SoftwareSerial.h>
 #include <dds238.h>
 
-SoftwareSerial swSerSDM(13, 15);
+SoftwareSerial swSerdds238(13, 15);
 
 //              _software serial reference
 //             |
-dds238 dds238(swSerSDM);
+dds238 dds238(swSerdds238);
 ```
 
 ```cpp
@@ -83,13 +83,13 @@ then can pass additional parameters as below:
 #include <SoftwareSerial.h>
 #include <dds238.h>
 
-SoftwareSerial swSerSDM(13, 15);
+SoftwareSerial swSerdds238(13, 15);
 
 //              __________________software serial reference
 //             |      ____________baudrate(optional, default from dds238_Config_User.h)   
 //             |     |           _dere pin for max485(optional, default from dds238_Config_User.h)
 //             |     |          |
-dds238 dds238(swSerSDM, 9600, NOT_A_PIN);
+dds238 dds238(swSerdds238, 9600, NOT_A_PIN);
 ```
 
 ```cpp
